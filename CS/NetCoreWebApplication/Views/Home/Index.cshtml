@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+}
+<!-- Add the following namespace usages: -->
+@using DevExpress.AspNetCore
+@using DevExpress.DashboardAspNetCore
+@using DevExpress.DashboardWeb
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Attach the Dashboard's stylesheets. -->
+    @Html.DevExpress().StyleSheets(config => config.AddDashboard(cssSettings => cssSettings.ColorScheme("light")))
+</head>
+<body>
+    <!-- Add the Web Dashboard with “clientDashboardDesigner1” name to a View, specify its size, and set the Working Mode to Designer. -->
+    <div style="position: absolute; left:0;top:0;right:0;bottom:0;">
+        @(Html.DevExpress().Dashboard("clientDashboardDesigner1")
+        .WorkingMode(WorkingMode.Designer)
+        .Width("100%")
+        .Height("100%")
+        )
+    </div>
+    <!-- Attach the Dashboard's scripts. -->
+    @Html.DevExpress().Scripts()
+</body>
+</html>
