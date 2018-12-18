@@ -1,56 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DevExpress.DashboardAspNetCore;
 using DevExpress.DashboardWeb;
 using DevExpress.AspNetCore;
+using Microsoft.Extensions.FileProviders;
 
-namespace AspNetCoreDashboardWebApplication
-{
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
+namespace AspNetCoreDashboardWebApplication {
+    public class Startup { 
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment) {
             Configuration = configuration;
+            FileProvider = hostingEnvironment.ContentRootFileProvider;
         }
 
         public IConfiguration Configuration { get; }
+        public IFileProvider FileProvider { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) {
+            // Add a DashboardController class descendant with a specified dashboard storage
+            // and a connection string provider.
             services
                 .AddMvc()
                 .AddDefaultDashboardController(configurator => {
-                    configurator.SetDashboardStorage(new DashboardFileStorage("App_Data\\Dashboards"));
+                    configurator.SetDashboardStorage(new DashboardFileStorage(FileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath));
                     configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(Configuration));
-
                 });
+            // Add the third-party (JQuery, Knockout, etc.) and DevExtreme libraries.
             services.AddDevExpressControls(settings => settings.Resources = ResourcesType.ThirdParty | ResourcesType.DevExtreme);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
+            } else {
                 app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseStaticFiles();
-
+            // Register the DevExpress middleware.
             app.UseDevExpressControls();
             app.UseMvc(routes => {
+                // Map dashboard routes.
                 routes.MapDashboardRoute();
                 routes.MapRoute(
                     name: "default",
