@@ -3,14 +3,15 @@
 }
 <!-- Add the following namespace usages: -->
 @using DevExpress.AspNetCore
-@using DevExpress.DashboardAspNetCore
 @using DevExpress.DashboardWeb
+@using DevExpress.DashboardAspNetCore
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Attach the Dashboard's stylesheets. -->
-    @Html.DevExpress().StyleSheets(config => config.AddDashboard(cssSettings => cssSettings.ColorScheme("light")))
+    <!-- Add bundled resources. -->
+    <link href="~/css/site.min.css" rel="stylesheet" />
+    <script src="~/js/site.min.js"></script>
 </head>
 <body>
     <!-- Add the Web Dashboard with the "clientDashboardControl1" name to a View, specify its size, and set the Working Mode to Designer. -->
@@ -21,7 +22,5 @@
         .Height("100%")
         )
     </div>
-    <!-- Attach the Dashboard's scripts. -->
-    @Html.DevExpress().Scripts()
 </body>
 </html>

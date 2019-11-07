@@ -16,7 +16,7 @@ namespace AspNetCoreDashboardWebApplication {
 
         public IConfiguration Configuration { get; }
         public IFileProvider FileProvider { get; }
-
+        
         public void ConfigureServices(IServiceCollection services) {
             // Add a DashboardController class descendant with a specified dashboard storage
             // and a connection string provider.
@@ -26,8 +26,8 @@ namespace AspNetCoreDashboardWebApplication {
                     configurator.SetDashboardStorage(new DashboardFileStorage(FileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath));
                     configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(Configuration));
                 });
-            // Add the third-party (JQuery, Knockout, etc.) and DevExtreme libraries.
-            services.AddDevExpressControls(settings => settings.Resources = ResourcesType.ThirdParty | ResourcesType.DevExtreme);
+            // 
+            services.AddDevExpressControls();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
@@ -42,7 +42,7 @@ namespace AspNetCoreDashboardWebApplication {
             app.UseDevExpressControls();
             app.UseMvc(routes => {
                 // Map dashboard routes.
-                routes.MapDashboardRoute();
+                routes.MapDashboardRoute("api/dashboard");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
