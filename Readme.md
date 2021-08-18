@@ -7,4 +7,4 @@ Restore npm packages to launch the project.
 
 ### See Also
 
-- [Create an ASP.NET Core 3.0 Dashboard Application](https://github.com/DevExpress-Examples/web-dashboard-asp-net-core-3)
+- [Create an ASP.NET Core 3.1 Dashboard Application](https://github.com/DevExpress-Examples/web-dashboard-asp-net-core-3)
