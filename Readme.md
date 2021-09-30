@@ -5,10 +5,12 @@
 <!-- default badges end -->
 # Get Started - Create an ASP.NET Core 2.1 Dashboard Application (Runtime sample)
 
+> **_NOTE:_** .NET Core 2.1 has reached end of life, meaning it is [no longer supported](https://dotnet.microsoft.com/download/dotnet/2.1). We recommend moving to a supported release: [Create an ASP.NET Core 3.1 Dashboard Application](https://github.com/DevExpress-Examples/web-dashboard-asp-net-core-3).
+
 
 The example contains the source code of the project created in the step-by-step tutorial: [Create an ASP.NET Core 2.1 Dashboard Application](https://docs.devexpress.com/Dashboard/119284/).
 
-Restore npm packages to launch the project.
+Restore npm packages to launch the project. Note that the script version on the client must match the version of libraries on the server.
 
 ### See Also
 
