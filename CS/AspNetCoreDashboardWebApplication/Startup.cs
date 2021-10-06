@@ -6,6 +6,7 @@ using DevExpress.DashboardAspNetCore;
 using DevExpress.DashboardWeb;
 using DevExpress.AspNetCore;
 using Microsoft.Extensions.FileProviders;
+using System;
 
 namespace AspNetCoreDashboardWebApplication {
     public class Startup { 
@@ -18,15 +19,13 @@ namespace AspNetCoreDashboardWebApplication {
         public IFileProvider FileProvider { get; }
         
         public void ConfigureServices(IServiceCollection services) {
-            // Add a DashboardController class descendant with a specified dashboard storage
-            // and a connection string provider.
-            services
-                .AddMvc()
-                .AddDefaultDashboardController(configurator => {
-                    configurator.SetDashboardStorage(new DashboardFileStorage(FileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath));
-                    configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(Configuration));
-                });
-            // 
+            services.AddMvc();
+            services.AddScoped<DashboardConfigurator>((IServiceProvider serviceProvider) => {
+                DashboardConfigurator configurator = new DashboardConfigurator();
+                configurator.SetDashboardStorage(new DashboardFileStorage(FileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath));
+                configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(Configuration));
+                return configurator;
+            });
             services.AddDevExpressControls();
         }
 
@@ -42,7 +41,7 @@ namespace AspNetCoreDashboardWebApplication {
             app.UseDevExpressControls();
             app.UseMvc(routes => {
                 // Map dashboard routes.
-                routes.MapDashboardRoute("api/dashboard");
+                routes.MapDashboardRoute("api/dashboard", "DefaultDashboard");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
